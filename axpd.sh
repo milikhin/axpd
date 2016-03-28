@@ -5,9 +5,10 @@ hex2dec(){
 checkbit(){
 	[ $(( $1 & $(( 1 << $2 )) )) != 0 ]
 }
-rmmod -f battery
+#rmmod -f battery
 modprobe i2c-dev 
 modprobe test_power
+export ADDR=12
 for i in 4 12
 do
 	if find /sys | grep axp288_charger | grep -q i2c-$i/
@@ -17,7 +18,7 @@ do
 done
 while true
 do
-	rmmod battery 2>/dev/null
+#	rmmod battery 2>/dev/null
 	echo off > /sys/module/test_power/parameters/ac_online
 	echo LION > /sys/module/test_power/parameters/battery_technology
 	source_status_reg=$(i2cget -f -y $ADDR 0x34 0x00)
